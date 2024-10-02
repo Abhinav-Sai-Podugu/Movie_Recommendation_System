@@ -10,19 +10,22 @@ def fetch_poster(movie_id):
     data = response.json()
     return "http://image.tmdb.org/t/p/w500/" + data['poster_path']
 
+
 def recommend(movie):
     id = movies[movies['title'] == movie].index[0]
     distance = similarity1[id]
-    movies_list = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:6]
+    movies_list = sorted(list(enumerate(distance)), reverse=True, key=lambda x: x[1])[1:11]
 
     recommended_movies = []
     recommended_poster = []
+    recommended_id = []
     for i in movies_list:
         movie_id = movies.iloc[i[0]].movie_id
 
         recommended_movies.append(movies.iloc[i[0]].title)
         recommended_poster.append(fetch_poster(movie_id))
-    return recommended_movies, recommended_poster
+        recommended_id.append(movies.iloc[i[0]].movie_id)
+    return recommended_movies, recommended_poster, recommended_id
 
 movies_dict = pickle.load(open('movie_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
@@ -42,26 +45,25 @@ option = st.selectbox(
 
 
 if st.button("Recommendations"):
-    names, posters = recommend(option)
+    names, posters, ids = recommend(option)
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    # cols = st.columns(10)
+    #
+    # for i, col in enumerate(cols):
+    #     with col:
+    #         st.text(names[i])
+    #         st.image(posters[i])
 
-    with col1:
-        st.text(names[0])
-        st.image(posters[0])
 
-    with col2:
-        st.text(names[1])
-        st.image(posters[1])
+    cols = st.columns(5, vertical_alignment="bottom")
 
-    with col3:
-        st.text(names[2])
-        st.image(posters[2])
+    for i in range(2):
+        for j in range(5):
+            # cols[j].write(f'Row {i + 1} in column {j + 1}')
+            with cols[j]:
+                name = names[(i*5)+j]
+                id = ids[(i*5)+j]
+                name1 = name.lower().replace(" ", "-")
 
-    with col4:
-        st.text(names[3])
-        st.image(posters[3])
-
-    with col5:
-        st.text(names[4])
-        st.image(posters[4])
+                st.markdown(f"[{name}](https://www.themoviedb.org/movie/{id}-{name1})")
+                st.image(posters[(i*5)+j])
