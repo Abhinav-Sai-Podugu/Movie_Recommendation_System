@@ -98,7 +98,7 @@ def recommend(movie):
         return []
 
     distance = similarity[id]
-    movies_list = sorted(list(enumerate(distance)), reverse = True, key = lambda x:x[1])[1:6]
+    movies_list = sorted(list(enumerate(distance)), reverse = True, key = lambda x:x[1])[1:11]
 
     for i in movies_list:
         print(dataset.iloc[i[0]].title)
