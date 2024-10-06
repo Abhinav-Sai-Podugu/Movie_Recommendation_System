@@ -8,7 +8,12 @@ import requests
 def fetch_poster(movie_id):
     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US'.format(movie_id))
     data = response.json()
-    return "http://image.tmdb.org/t/p/w500/" + data['poster_path']
+
+    poster_path = data.get('poster_path')
+    if poster_path:
+        return "http://image.tmdb.org/t/p/w500/" + data['poster_path']
+    else :
+        return "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
 
 
 def recommend(movie):
@@ -47,19 +52,10 @@ option = st.selectbox(
 if st.button("Recommendations"):
     names, posters, ids = recommend(option)
 
-    # cols = st.columns(10)
-    #
-    # for i, col in enumerate(cols):
-    #     with col:
-    #         st.text(names[i])
-    #         st.image(posters[i])
-
-
     cols = st.columns(5, vertical_alignment="bottom")
 
     for i in range(2):
         for j in range(5):
-            # cols[j].write(f'Row {i + 1} in column {j + 1}')
             with cols[j]:
                 name = names[(i*5)+j]
                 id = ids[(i*5)+j]

@@ -12,7 +12,7 @@ movies = pd.read_csv('tmdb_5000_movies.csv')
 credits = pd.read_csv('tmdb_5000_credits.csv')
 
 movies = movies.merge(credits, on = 'title')
-movies = movies[['movie_id', 'title', 'genres', 'keywords', 'overview', 'production_companies', 'vote_average', 'vote_count', 'crew', 'cast']]
+movies = movies[['movie_id', 'title', 'genres', 'keywords', 'overview', 'production_companies', 'crew', 'cast']]
 print(movies.head())
 
 movies.isnull().sum()
