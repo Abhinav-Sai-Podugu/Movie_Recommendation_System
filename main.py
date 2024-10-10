@@ -60,7 +60,7 @@ movies['cast'] = movies['cast'].apply(lambda x:[i.replace(" ", "") for i in x])
 movies['crew'] = movies['crew'].apply(lambda x:[i.replace(" ", "") for i in x])
 
 movies['final'] = movies['overview'] + movies['keywords'] + movies['genres'] + movies['production_companies'] + movies['cast'] + movies['crew']
-dataset = movies[['movie_id', 'title', 'final', 'vote_average', 'vote_count']]
+dataset = movies[['movie_id', 'title', 'final']]
 dataset['final'] = dataset['final'].apply(lambda x:" ".join(x))
 
 dataset['final'] = dataset['final'].apply(lambda x:x.lower())
